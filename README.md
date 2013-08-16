@@ -1,76 +1,43 @@
-Compile:
-=======
+## 综述
+目录中包括数独程序的C++与Java两版本, 使用的算法,算法实现, 类库设计完全相同.
+
+## C++編譯运行方法(Linux only, 且依赖gcc >= 4.7):
 	$ make
-	[dep] src/main.cc ...
-	[dep] src/DL.cc ...
-	[dep] src/utils.cc ...
-	[dep] src/debugutils.cc ...
-	[cc] src/utils.cc ...
-	[cc] src/debugutils.cc ...
-	[cc] src/main.cc ...
-	[cc] src/DL.cc ...
-	mkdir: created directory ‘bin’
-	Linking ...
-	done.
+	$ ./main ../test.txt ./output
 
-Algorithm:
-=========
-首先將數獨問題轉化爲exact cover問題(http://en.wikipedia.org/wiki/Exact_cover)
+## Java编译运行方法:
+	$ javac *.java
+	$ java Sudoku ../test.txt ./output
 
-然後利用Donald E. Knuth提出的Algorithm X求解(http://en.wikipedia.org/wiki/Knuth's_Algorithm_X)
+## 输入输出说明:
+两程序对外行为完全一致.
+程序将从第一个参数的文件名内读取一个数独矩阵, 所有答案将写入到第二参数的文件中, 用换行符分隔.
+同时, 程序将在标准输出中输出程序计算时间(不包含IO时间), 及结果总数.
 
-	* 求解思路爲,對於當前已選擇的行,刪除行中所有1所在的列,及這些列中的1所在的行,再進行遞歸搜索.
-
-	* 搜索失敗則回溯,選擇另外的行.
-
-Algorithm X的實現利用了Knuth提出的Dancing Links算法(http://en.wikipedia.org/wiki/Dancing_Links).
-
-	* 實現原理大致爲,將所有“1”利用雙向十字鏈表相連,快速的維護刪除及還原的操作,以保證遞歸回溯時的效率.
+## 算法简述:
+首先将数独问题转化为exact cover问题(http://en.wikipedia.org/wiki/Exact_cover)
+然后利用Donald E. Knuth提出的Algorithm X求解(http://en.wikipedia.org/wiki/Knuth's_Algorithm_X)
+	求解思路为,对于当前已选择的行,刪除行中所有1所在的列,及这些列中的1所在的行,再进行递归搜索.
+	搜索失败败回溯,选择另外的行.
+Algorithm X的实现利用了Knuth提出的Dancing Links算法(http://en.wikipedia.org/wiki/Dancing_Links).
+	实现原理大致为,将所有“1”利用双向十字链表相连,快速的维护刪除及还原的操作,以保证递归回溯时的效率.
 
 
-Efficiency:
-=========
-test 目錄中包含91個網上找到的比較難的測試數據.
+## 性能
 
-通過`make test`命令調用腳本進行測試,均可以瞬間出解.
+使用``test_big.txt``做测试数据, 其内容为我随机输入, 此数独共有2681311个解.
 
-	$ make test
-	real    0m0.002s
-	user    0m0.000s
-	sys     0m0.000s
+测试环境cpu: 8 x i7-3770 3.4GHz
 
-	real    0m0.002s
-	user    0m0.000s
-	sys     0m0.000s
++----------+------------+---------+
+|          |   C++      | Java    |
++----------+------------+---------+
+| 计算用时 |   4.5s     | 27.0s   |
+| 总用时   |   20.1s    | 51.8s   |
+| 内存峰值 |   936M     | 1.76G   |
+| cpu峰值  |   99%      | 约600%  |
++----------+------------+---------+
 
-	real    0m0.002s
-	user    0m0.000s
-	sys     0m0.000s
-	....
-
-
-Memory:
-======
-
-	$ cat /proc/$(pgrep main)/status |grep 'VmHWM'
-	VmHWM:      1380 kB
-
-程序大約佔用1~2M物理內存.
-
-用valgrind檢查,無內存泄漏
-
-	$ valgrind --leak-check=full --track-origins=yes --show-reachable=yes bin/main test1.txt /tmp/out                                                                                                                                           1
-	==1054== Memcheck, a memory error detector
-	==1054== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
-	==1054== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
-	==1054== Command: bin/main test1.txt /tmp/out
-	==1054==
-	==1054==
-	==1054== HEAP SUMMARY:
-	==1054==     in use at exit: 0 bytes in 0 blocks
-	==1054==   total heap usage: 974 allocs, 974 frees, 6,345,900 bytes allocated
-	==1054==
-	==1054== All heap blocks were freed -- no leaks are possible
-	==1054==
-	==1054== For counts of detected and suppressed errors, rerun with: -v
-	==1054== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)
+注1: Java版本直接运行会抛出``OutOfMemoryError``异常,设置堆空间最大值为3G(``-Xmx3G``)后能够运行.
+注2: 计算用时不包含文件IO操作, 总用时中大部分为输出结果至``/dev/null``的用时.
+注3: 类库设计中, 是由负责计算的类返回所有计算结果, 再一起输出. 因而会占大量内存.

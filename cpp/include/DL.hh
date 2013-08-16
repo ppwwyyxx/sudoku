@@ -1,5 +1,5 @@
 // File: DL.hh
-// Date: Sat Mar 30 11:21:29 2013 +0800
+// Date: Fri Aug 16 18:05:38 2013 +0800
 // Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
 #ifndef __HEAD__DL
@@ -8,14 +8,14 @@
 #include <vector>
 #include "matrix.hh"
 
-class Node {
-	public:
-		Node *u, *d, *l, *r;
-		int col, row;
-};
 
 // Exact Cover Class Using Dancing Links
 class DL {
+	struct Node {
+		Node *u, *d, *l, *r;
+		int col, row;
+	};
+
 	public:
 		DL(MatrixBase<bool>* m) :
 			mat(m) {
@@ -34,9 +34,9 @@ class DL {
 
 		void init();
 
-		std::vector<int> solve();
+		std::vector<std::vector<int>> solve();
 
-		bool search();
+		void search();
 
 		void cover(Node*);
 
@@ -51,6 +51,7 @@ class DL {
 		Node root;
 		int* sum;
 		std::vector<int> ans;
+		std::vector<std::vector<int>> ret;
 };
 
 #endif //HEAD

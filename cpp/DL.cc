@@ -1,11 +1,13 @@
 // File: DL.cc
-// Date: Sun Mar 31 13:35:56 2013 +0800
+// Date: Fri Aug 16 20:57:40 2013 +0800
 // Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
 #include <vector>
 #include <iostream>
 using namespace std;
 
+#include "debugutils.hh"
+#include "utils.hh"
 #include "DL.hh"
 
 void DL::init() {
@@ -17,7 +19,7 @@ void DL::init() {
 	// if a column needn't to be covered anymore, it will be deleted
 	//
 	// link all the node vertically with col as head
-	for (int i = 0; i < maxx; i ++) {
+	REP(i, maxx) {
 		col[i].col = i;		// for find min_column
 		col[i].u = col[i].d = &col[i];
 		if (!i)
@@ -35,14 +37,13 @@ void DL::init() {
 	// link all the node in one row with row[] as head
 	// horizontally, row[].u, row[].d don't matter
 	Node* row = new Node[maxy];
-	for (int j = 0; j < maxy; j ++)
+	REP(j, maxy)
 		row[j].u = row[j].d = row[j].l = row[j].r = &row[j];
 
 	// initialize nodes
 	for (int cnt = 0, j = 0; j < maxy; j ++)
-		for (int i = 0; i < maxx; i ++) {
-			if (!mat->val[j][i])
-				continue;
+		REP(i, maxx) {
+			if (!mat->val[j][i]) continue;
 			// the for loop is increasing, explaining the following order to insert nodes
 			nodes[cnt].col = i, nodes[cnt].row = j;
 			nodes[cnt].u = col[i].u;
@@ -59,16 +60,18 @@ void DL::init() {
 
 	// delete head, to make a circle list in every row.
 	// head will cause trouble later when iterating
-	for (int j = 0; j < maxy; j ++) {
+	REP(j, maxy) {
 		row[j].l->r = row[j].r;
 		row[j].r->l = row[j].l;
 	}
 	delete[] row;
 }
 
-bool DL::search() {
-	if (root.r == &root)
-		return true;
+void DL::search() {
+	if (root.r == &root) {
+		ret.push_back(ans);
+		return;
+	}
 
 	// find a column with least "1"s
 	Node* min = root.r;
@@ -86,8 +89,7 @@ bool DL::search() {
 		for (Node* q = p->r; q != p; q = q->r)
 			cover(&col[q->col]);
 
-		if (search())
-			return true;
+		search();
 
 		print_debug("pop ans %d\n", p->row);
 		ans.pop_back();
@@ -96,7 +98,6 @@ bool DL::search() {
 			uncover(&col[q->col]);
 	}
 	uncover(min);
-	return false;
 }
 
 void DL::cover(Node* s) {
@@ -123,11 +124,11 @@ void DL::uncover(Node* s) {
 	s->l->r = s->r->l = s;
 }
 
-vector<int> DL::solve() {
+vector<vector<int>> DL::solve() {
+	ret.clear();
 	ans.clear();
 	init();
-	if(!search())
-		sassert(0);
-	return ans;
+	search();
+	return move(ret);
 }
 

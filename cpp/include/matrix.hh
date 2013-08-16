@@ -1,9 +1,10 @@
 // File: matrix.hh
-// Date: Sat Mar 30 10:15:40 2013 +0800
+// Date: Fri Aug 16 18:45:40 2013 +0800
 // Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
 #ifndef __HEAD__MATRIX
 #define __HEAD__MATRIX
+
 #include "debugutils.hh"
 
 // basic 2-d array
@@ -13,8 +14,8 @@ class MatrixBase {
 		T **val;
 		int w, h;
 
-		MatrixBase(int m_w, int m_h):
-			w(m_w), h(m_h) {
+		MatrixBase(int _w, int _h):
+			w(_w), h(_h) {
 				val = new T* [h];
 				for (int i = 0; i < h; i ++)
 					val[i] = new T[w]();

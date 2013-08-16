@@ -1,12 +1,15 @@
 // File: main.cc
-// Date: Sat Mar 30 11:14:54 2013 +0800
+// Date: Fri Aug 16 21:24:44 2013 +0800
 // Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
 #include <cstdio>
+#include <iostream>
 #include <cstdlib>
 #include <cmath>
 #include <map>
 #include <utility>
+#include "utils.hh"
+#include <sys/time.h>
 #include "matrix.hh"
 #include "DL.hh"
 using namespace std;
@@ -28,9 +31,9 @@ int main(int argc, char* argv[]) {
 	line = (char*) malloc (NUM + 1);
 	size_t len = NUM;
 
-	for (int i = 0; i < NUM; i ++) {
+	REP(i, NUM) {
 		getline(&line, &len, fin);
-		for (int j = 0; j < NUM; j ++) {
+		REP(j, NUM) {
 			int x = line[j] - (NUM == 9 ? '0' : 'A' - 1);
 			if ((line[j] == '-') || (line[j] == '.'))
 				x = 0;
@@ -41,8 +44,11 @@ int main(int argc, char* argv[]) {
 	free(line);
 	fclose(fin);
 
+	timeval start_time;
+	gettimeofday(&start_time, nullptr);
+
 	MatrixBase<bool> mat(SQR * 4, n + (SQR - n) * NUM);
-	map<int, pair<int, int> > line_record;
+	pair<int, int>* line_record = new pair<int, int>[mat.h]();
 
 	// add node[i][j] of value v to the cover matrix
 #define add(i, j, v)\
@@ -56,7 +62,7 @@ int main(int argc, char* argv[]) {
 	} while (0)
 
 	for (int linecnt = 0, i = 0; i < NUM; i ++)
-		for (int j = 0; j < NUM; j ++) {
+		REP(j, NUM) {
 			if (orig[i][j])
 				add(i, j, orig[i][j]);
 			else
@@ -66,16 +72,25 @@ int main(int argc, char* argv[]) {
 #undef add
 
 	DL cover(&mat);
-	vector<int> ans = cover.solve();
-	for (vector<int>::iterator itr = ans.begin(); itr != ans.end(); itr ++) {
-		int i = *itr;
-		pair<int, int> res = line_record[i];
-		orig[res.first / NUM][res.first % NUM] = res.second;
-	}
+	auto ret = cover.solve();
+
+	timeval end_time;
+	gettimeofday(&end_time, nullptr);
+	cout << end_time.tv_sec - start_time.tv_sec + (double)(end_time.tv_usec - start_time.tv_usec) / 1e6
+		<< " seconds spent on calculation." << endl;
 
 	FILE* fout = fopen(argv[2], "w");
-	for (int i = 0; i < NUM; i ++)
-		for (int j = 0; j < NUM; j ++)
+	for (auto & ans: ret) {
+		for (auto i : ans) {
+			pair<int, int> res = line_record[i];
+			orig[res.first / NUM][res.first % NUM] = res.second;
+		}
+		REP(i, NUM) REP(j, NUM)
 			fprintf(fout, "%c%s", (NUM == 9 ? orig[i][j] + '0' : orig[i][j] + 'A' - 1) , j == NUM - 1 ? "\n" : "");
+		fprintf(fout, "\n");
+	}
+	delete[] line_record;
 	fclose(fout);
+
+	cout << ret.size() << endl;
 }

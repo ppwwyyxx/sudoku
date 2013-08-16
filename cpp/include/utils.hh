@@ -1,5 +1,5 @@
 // File: utils.hh
-// Date: Sat Mar 30 10:52:00 2013 +0800
+// Date: Fri Aug 16 17:16:44 2013 +0800
 // Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
 #ifndef __HEAD__UTILS
@@ -11,6 +11,11 @@
 #include <cstdio>
 #include <sstream>
 using namespace std;
+
+#define REP(x, y) for (int x = 0; x < (y); x ++)
+#define REPL(x, y, z) for (int x = y; x < (z); x ++)
+#define REPD(x, y, z) for (int x = y; x >= (z); x --)
+#define P(a) std::cout << (a) << std::endl
 
 string TERM_COLOR(int k);
 

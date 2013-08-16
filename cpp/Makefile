@@ -1,23 +1,23 @@
 
 # $File: Makefile
-# $Date: Sun Mar 31 13:36:48 2013 +0800
+# $Date: Fri Aug 16 17:19:46 2013 +0800
 
 OBJ_DIR = obj
-TARGET = bin/main
+TARGET = main
 
-INCLUDE_DIR = -Isrc/include
+INCLUDE_DIR = -Iinclude
 #DEFINES = -DDEBUG
 OPTFLAGS = -O3
-CXXFLAGS = $(INCLUDE_DIR) $(DEFINES) $(OPTFLAGS)
+CXXFLAGS = $(INCLUDE_DIR) $(DEFINES) $(OPTFLAGS) -std=c++11
 LDFLAGS =
 
 CC = g++
 SHELL = bash
-ccSOURCES = $(shell find src -name "*.cc" | sed 's/^\.\///g')
+ccSOURCES = $(shell find -name "*.cc" | sed 's/^\.\///g')
 OBJS = $(addprefix $(OBJ_DIR)/,$(ccSOURCES:.cc=.o))
 DEPFILES = $(OBJS:.o=.d)
 
-.PHONY: all clean run test bin
+.PHONY: all clean run test
 
 all: $(TARGET)
 
@@ -33,21 +33,17 @@ $(OBJ_DIR)/%.d: %.cc
 	@$(CC) $(INCLUDE_DIR) $(DEFINES) -MM -MT "$(OBJ_DIR)/$(<:.cc=.o) $(OBJ_DIR)/$(<:.cc=.d)" "$<"  > "$@"
 
 
-$(TARGET): $(OBJS) bin
+$(TARGET): $(OBJS)
 	@echo "Linking ..."
 	@$(CC) $(OBJS) -o $@ $(LDFLAGS)
 	@echo "done."
 
-bin:
-	@mkdir -pv bin
-
 
 clean:
 	@rm -rf $(OBJ_DIR) $(TARGET)
-	@rm -rf bin
 
 run: $(TARGET)
 	./$(TARGET)
 
 test:
-	./test/test.sh $(TARGET)
+	../test/test.sh $(TARGET)
