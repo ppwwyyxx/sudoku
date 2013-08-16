@@ -15,14 +15,14 @@
 同时, 程序将在标准输出中输出程序计算时间(不包含IO时间), 及结果总数.
 
 ### 算法简述:
-首先将数独问题转化为exact cover问题(http://en.wikipedia.org/wiki/Exact_cover)
+首先将数独问题转化为[exact cover问题](http://en.wikipedia.org/wiki/Exact_cover)
 
-然后利用Donald E. Knuth提出的Algorithm X求解(http://en.wikipedia.org/wiki/Knuth's_Algorithm_X)
+然后利用Donald E. Knuth提出的[Algorithm X](http://en.wikipedia.org/wiki/Knuth's_Algorithm_X)求解
 
 	求解思路为,对于当前已选择的行,刪除行中所有1所在的列,及这些列中的1所在的行,再进行递归搜索.
 	搜索失败败回溯,选择另外的行.
 
-Algorithm X的实现利用了Knuth提出的Dancing Links算法(http://en.wikipedia.org/wiki/Dancing_Links).
+Algorithm X的实现利用了Knuth提出的[Dancing Links算法](http://en.wikipedia.org/wiki/Dancing_Links).
 
 	实现原理大致为,将所有“1”利用双向十字链表相连,快速的维护刪除及还原的操作,以保证递归回溯时的效率.
 
