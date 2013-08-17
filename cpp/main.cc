@@ -1,5 +1,5 @@
 // File: main.cc
-// Date: Fri Aug 16 21:24:44 2013 +0800
+// Date: Sat Aug 17 14:25:30 2013 +0800
 // Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
 #include <cstdio>
@@ -92,5 +92,5 @@ int main(int argc, char* argv[]) {
 	delete[] line_record;
 	fclose(fout);
 
-	cout << ret.size() << endl;
+	cout << ret.size() << " results" << endl;
 }
