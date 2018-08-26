@@ -1,6 +1,6 @@
 // File: matrix.hh
 // Date: Fri Aug 16 18:45:40 2013 +0800
-// Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 #ifndef __HEAD__MATRIX
 #define __HEAD__MATRIX

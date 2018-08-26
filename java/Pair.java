@@ -1,6 +1,6 @@
 //File: Pair.java
 //Date: Fri Aug 16 17:43:03 2013 +0800
-//Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 
 public class Pair<T1, T2> {

@@ -1,6 +1,6 @@
 // File: utils.hh
 // Date: Fri Aug 16 17:16:44 2013 +0800
-// Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 #ifndef __HEAD__UTILS
 #define __HEAD__UTILS

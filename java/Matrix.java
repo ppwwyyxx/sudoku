@@ -1,6 +1,6 @@
 //File: Matrix.java
 //Date: Fri Aug 16 18:38:01 2013 +0800
-//Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 public class Matrix {
 	final int M;

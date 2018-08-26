@@ -1,6 +1,6 @@
 //File: DancingLinks.java
 //Date: Fri Aug 16 21:47:40 2013 +0800
-//Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 import java.util.List;
 import java.util.ArrayList;

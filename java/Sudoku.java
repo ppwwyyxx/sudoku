@@ -1,6 +1,6 @@
 //File: Sudoku.java
 //Date: Fri Aug 16 21:47:42 2013 +0800
-//Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

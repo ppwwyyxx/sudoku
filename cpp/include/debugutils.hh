@@ -1,6 +1,6 @@
 // File: debugutils.hh
 // Date: Tue Mar 26 18:35:49 2013 +0800
-// Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 #ifndef __HEAD__DEBUGUTILS
 #define __HEAD__DEBUGUTILS

@@ -1,6 +1,6 @@
 // File: DL.cc
 // Date: Fri Aug 16 20:57:40 2013 +0800
-// Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 #include <vector>
 #include <iostream>

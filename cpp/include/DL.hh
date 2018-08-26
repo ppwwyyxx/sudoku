@@ -1,6 +1,6 @@
 // File: DL.hh
 // Date: Fri Aug 16 18:05:38 2013 +0800
-// Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+
 
 #ifndef __HEAD__DL
 #define __HEAD__DL
